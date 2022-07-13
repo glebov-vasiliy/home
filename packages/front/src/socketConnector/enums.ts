@@ -1,0 +1,10 @@
+export enum Command {
+  GET_UNITS = 'GET_UNITS',
+  CHANGE_LIGHT = 'CHANGE_LIGHT',
+}
+
+export enum Event {
+  GET_UNITS_SUCCESS = 'GET_UNITS_SUCCESS',
+  CHANGE_LIGHT_SUCCESS = 'CHANGE_LIGHT_SUCCESS',
+  EXCEPTION = 'exception',
+}

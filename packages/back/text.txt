@@ -1,0 +1,22 @@
+
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d 'packages/back/migrations/data-source.ts'",
+
+        "typeorm": "typeorm-ts-node-commonjs",
+          "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/data-source.ts",
+          "schema:sync": "npm run typeorm schema:sync -- -d src/data-source.ts",
+          "migration:show": "npm run typeorm migration:show -- -d src/data-source.ts",
+          "migration:generate": "npm run typeorm migration:generate -- -d src/data-source.ts",
+          "migration:create": "npm run typeorm migration:create"
+
+
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d 'packages/back/migrations/data-source.ts'",
+    "migration:create": "npm run migration:create",
+    "migration:generate": "npm run typeorm migration:generate -n -d 'packages/back/migrations/data-source.ts'",
+    "migration:run": "npm run typeorm migration:run -d 'packages/back/migrations/data-source.ts'"
+
+        "typeorm": "typeorm-ts-node-commonjs",
+        "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d packages/back/data-source.ts",
+        "schema:sync": "npm run typeorm schema:sync -- -d packages/back/data-source.ts",
+        "migration:show": "npm run typeorm migration:show -- -d packages/back/data-source.ts",
+        "migration:generate": "npm run typeorm migration:generate -- -d packages/back/data-source.ts",
+        "migration:create": "npm run typeorm migration:create ./packages/back/migrations/PostRefactoring"
