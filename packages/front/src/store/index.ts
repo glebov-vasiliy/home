@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { rootReducer, RootState } from './reducers'
 import { RootAction } from './types'
 import { rootEpics } from './epics'
-import { BackendConnector } from '../socketConnector'
+import { BackendConnector } from '../api/socketConnector'
 const connector = BackendConnector.Instance
 
 declare global {

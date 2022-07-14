@@ -4,7 +4,7 @@ import { RootState } from '../reducers'
 import { filter, map, merge, of } from 'rxjs'
 import { isActionOf } from 'typesafe-actions'
 import * as actions from '../actions/wshub'
-import { ConnectorEvent } from '../../socketConnector'
+import { ConnectorEvent } from '../../api/socketConnector'
 import { switchMap } from 'rxjs/operators'
 import { init } from '../actions'
 

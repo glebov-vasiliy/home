@@ -10,3 +10,12 @@ export class UsersController {
     return this.userService.findAll()
   }
 }
+@Controller('users/logins')
+export class UsersLoginController {
+  constructor(private readonly userService: UsersService) {}
+
+  @Get()
+  findAll() {
+    return this.userService.findAll() // test data
+  }
+}

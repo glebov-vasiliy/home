@@ -7,9 +7,11 @@ import { useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Box } from '@mui/material'
+import { Login } from './components/Login'
 
 const App: FC = () => {
   const isInit = useSelector(initSelector)
+
   if (!isInit)
     return (
       <Box
@@ -18,6 +20,8 @@ const App: FC = () => {
         <CircularIndeterminate />
       </Box>
     )
+
+  return <Login />
   return (
     <>
       <MenuAppBar />

@@ -5,8 +5,7 @@ import * as schemas from './schemas'
 
 import { Command, Event } from './enums'
 import { FeedMessage, CommandMessage, FeedEvent } from './connector-types'
-import { ChangeLightUnit } from '../store/types/appState'
-import { ChangeLightEvent, UnitsEvent } from './schemas'
+import { ChangeLightEvent } from './schemas'
 
 export class BackendConnector {
   private static instance: BackendConnector

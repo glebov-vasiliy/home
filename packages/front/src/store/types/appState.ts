@@ -1,5 +1,5 @@
 import { LoadingStateEnum } from '../../enums'
-import { UnitEvent } from '../../socketConnector/schemas'
+import { UnitEvent } from '../../api/socketConnector/schemas'
 
 export type AppState = {
   init: boolean

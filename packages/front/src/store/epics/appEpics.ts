@@ -1,4 +1,4 @@
-import { catchError, EMPTY, filter, map, of } from 'rxjs'
+import { catchError, EMPTY, filter, from, map, of } from 'rxjs'
 import { Epic } from 'redux-observable'
 import { MiddlewareDependencies, RootAction } from '../types'
 import { RootState } from '../reducers'
@@ -10,9 +10,11 @@ import { getUnitsAction } from '../actions'
 import { changeLightUnitAction } from '../actions'
 import { notify } from '../actions'
 import { appErrorAction } from '../actions'
-import { UnitsEvent } from '../../socketConnector/schemas'
+import { UnitsEvent } from '../../api/socketConnector/schemas'
 import { LoadingStateEnum } from '../../enums'
 import { Entries, Units } from '../types/appState'
+import { loginAction } from '../actions'
+import { AuthService } from '../../api/services'
 
 export const onAppErrorEpic: Epic<RootAction, RootAction, RootState, MiddlewareDependencies> = (action$) =>
   action$.pipe(
@@ -97,6 +99,18 @@ export const changeLightUnitEpic: Epic<RootAction, RootAction, RootState, Middle
   )
 }
 
+export const onLoginEpic: Epic<RootAction, RootAction, RootState, MiddlewareDependencies> = (action$) => {
+  return action$.pipe(
+    filter(isActionOf([loginAction.request])),
+    switchMap(({ payload }) => {
+      return from(AuthService.login({ data: { ...payload } })).pipe(
+        map((payload) => loginAction.success(payload)), // TODO make types for payload
+        catchError(({ status, message }) => of(loginAction.failure({ status, message }))),
+      )
+    }),
+  )
+}
+
 export default [
   initEpic,
   initSuccessEpic,
@@ -104,4 +118,5 @@ export default [
   changeLightUnitEpic,
   onGetUnitsActionEpic,
   onAppErrorEpic,
+  onLoginEpic,
 ]
