@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from './users.entity'
+// import bcrypt from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -9,6 +10,12 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
+  checkLogin({ login, password }: { login: string; password: string }) {
+    return true
+    // const hash = 'sdfsd'
+    // return bcrypt.compareSync(password, hash)
+  }
 
   findAll(): Promise<User[]> {
     return this.usersRepository.find()

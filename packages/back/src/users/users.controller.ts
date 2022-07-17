@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import { UsersService } from './users.service'
 
 @Controller('users')
@@ -10,12 +10,12 @@ export class UsersController {
     return this.userService.findAll()
   }
 }
-@Controller('users/logins')
+@Controller('users/login')
 export class UsersLoginController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  findAll() {
-    return this.userService.findAll() // test data
+  checkLogin(@Query() params) {
+    return this.userService.checkLogin(params)
   }
 }
