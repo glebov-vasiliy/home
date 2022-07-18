@@ -3,5 +3,10 @@ import { RequestMethodEnum } from '../../modules/RequestModel/enums'
 
 export const login = createRequestModel({
   method: RequestMethodEnum.GET,
-  path: '/api/users/login',
+  path: '/api/auth/login',
+})
+
+export const signup = createRequestModel({
+  method: RequestMethodEnum.POST,
+  path: '/api/users/signup',
 })

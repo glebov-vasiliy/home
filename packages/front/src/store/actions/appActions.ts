@@ -34,4 +34,4 @@ export const loginAction = createAsyncAction(
   '@@app/loginActionRequest',
   '@@app/loginActionSuccess',
   '@@app/loginActionFailure',
-)<{ login: string; password: string }, unknown, ExceptionEvent>()
+)<{ username: string; password: string }, unknown, ExceptionEvent>()

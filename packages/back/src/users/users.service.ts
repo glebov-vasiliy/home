@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from './users.entity'
-// import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -11,21 +11,35 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  checkLogin({ login, password }: { login: string; password: string }) {
-    return true
-    // const hash = 'sdfsd'
-    // return bcrypt.compareSync(password, hash)
+  findOne(username: string) {
+    return this.usersRepository.findOne({
+      select: ['id', 'username', 'password', 'isActive'],
+      where: [{ username: username }],
+    })
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find()
+  count(username: string) {
+    return this.usersRepository.count({
+      where: [{ username: username }],
+    })
   }
 
-  // findOne(id: string): Promise<User> {
-  //   return this.usersRepository.findOneBy({ user_id })
+  async createUser({ name = '', username = '', password = '' }) {
+    if (!name || !/^[A-Za-z]+$/g.test(name)) throw new HttpException('wrongName', HttpStatus.BAD_REQUEST)
+    if (!username || !/^[A-Za-z\d]+$/g.test(username)) throw new HttpException('wrongLogin', HttpStatus.BAD_REQUEST)
+    if (!password) throw new HttpException('wrongPassword', HttpStatus.BAD_REQUEST) // TODO mb create password rules
+    if (await this.count(username)) throw new HttpException('userExisting', HttpStatus.BAD_REQUEST)
+
+    await this.usersRepository.insert({
+      name,
+      username,
+      password: bcrypt.hashSync(password, 10, (err, hash) => hash),
+      isActive: false,
+    })
+    return { status: 'success', message: 'userAdded' }
+  }
+
+  // async remove(id: string): Promise<void> {
+  //   await this.usersRepository.delete(id)
   // }
-
-  async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id)
-  }
 }

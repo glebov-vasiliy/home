@@ -3,10 +3,10 @@ import { UnitsService } from './units.service'
 
 @Controller()
 export class UnitsController {
-  constructor(private readonly userService: UnitsService) {}
+  constructor(private readonly unitService: UnitsService) {}
 
   @Get()
   findAll() {
-    return this.userService.findAll()
+    return this.unitService.findAll()
   }
 }

@@ -14,7 +14,7 @@ import { UnitsEvent } from '../../api/socketConnector/schemas'
 import { LoadingStateEnum } from '../../enums'
 import { Entries, Units } from '../types/appState'
 import { loginAction } from '../actions'
-import { AuthService } from '../../api/services'
+import { UsersService } from '../../api/services'
 
 export const onAppErrorEpic: Epic<RootAction, RootAction, RootState, MiddlewareDependencies> = (action$) =>
   action$.pipe(
@@ -103,9 +103,9 @@ export const onLoginEpic: Epic<RootAction, RootAction, RootState, MiddlewareDepe
   return action$.pipe(
     filter(isActionOf([loginAction.request])),
     switchMap(({ payload }) => {
-      return from(AuthService.login({ data: { ...payload } })).pipe(
+      return from(UsersService.login({ data: { ...payload } })).pipe(
         map((payload) => loginAction.success(payload)), // TODO make types for payload
-        catchError(({ status, message }) => of(loginAction.failure({ status, message }))),
+        catchError((error) => of(loginAction.failure(error))),
       )
     }),
   )

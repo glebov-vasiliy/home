@@ -1,1 +1,1 @@
-export * as AuthModel from './AuthModel'
+export * as AuthModel from './UserModels'

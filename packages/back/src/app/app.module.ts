@@ -7,12 +7,14 @@ import { UnitsModule } from '../units/units.module'
 import { UsersModule } from '../users/users.module'
 import { User } from '../users/users.entity'
 import { Unit } from '../units/units.entity'
+import { AuthModule } from '../autch/auth.module'
 
 @Module({
   imports: [
     EventsModule,
     UnitsModule,
     UsersModule,
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.NX_MYSQL_HOST,

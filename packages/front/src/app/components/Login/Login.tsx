@@ -5,25 +5,25 @@ import { loginAction } from '../../../store/actions'
 
 export const Login: FC = () => {
   const dispatch = useDispatch()
-  const [login, setLogin] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { type, value } = event.target
-    if (type === 'text') setLogin(value)
+    if (type === 'text') setUsername(value)
     if (type === 'password') setPassword(value)
   }, [])
 
   const handleClick = useCallback(() => {
-    dispatch(loginAction.request({ login, password }))
-  }, [dispatch, login, password])
+    dispatch(loginAction.request({ username, password }))
+  }, [dispatch, username, password])
 
   return (
     <Dialog open={true}>
       <DialogTitle sx={{ textAlign: 'center' }}>Authorization</DialogTitle>
       <List sx={{ pt: 0 }}>
         <ListItem>
-          <TextField label="Login" type="text" onChange={handleChange} />
+          <TextField label="Username" type="text" onChange={handleChange} />
         </ListItem>
         <ListItem>
           <TextField label="Password" type="password" onChange={handleChange} />
