@@ -24,19 +24,18 @@ export class UsersService {
     })
   }
 
-  async createUser({ name = '', username = '', password = '' }) {
-    if (!name || !/^[A-Za-z]+$/g.test(name)) throw new HttpException('wrongName', HttpStatus.BAD_REQUEST)
-    if (!username || !/^[A-Za-z\d]+$/g.test(username)) throw new HttpException('wrongLogin', HttpStatus.BAD_REQUEST)
-    if (!password) throw new HttpException('wrongPassword', HttpStatus.BAD_REQUEST) // TODO mb create password rules
-    if (await this.count(username)) throw new HttpException('userExisting', HttpStatus.BAD_REQUEST)
-
+  async createUser({ name = '', username = '', password = '' }): Promise<string> {
+    if (!name || !/^[A-Za-z]+$/g.test(name)) return 'wrongName'
+    if (!username || !/^[A-Za-z\d]+$/g.test(username)) return 'wrongLogin'
+    if (!password) return 'wrongPassword' // TODO mb create password rules
+    if (await this.count(username)) return 'userExisting'
     await this.usersRepository.insert({
       name,
       username,
       password: bcrypt.hashSync(password, 10, (err, hash) => hash),
       isActive: false,
     })
-    return { status: 'success', message: 'userAdded' }
+    return 'userAdded'
   }
 
   // async remove(id: string): Promise<void> {
