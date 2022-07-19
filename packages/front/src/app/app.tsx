@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { MenuAppBar } from './components/MenuAppBar'
 import { TabPanel } from './components/TabPanel'
 import { CircularIndeterminate } from './components/CircularIndeterminate'
-import { initSelector } from '../store/selectors'
+import { authSelector, initSelector } from '../store/root/selectors'
 import { useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -11,6 +11,9 @@ import { Login } from './components/Login'
 
 const App: FC = () => {
   const isInit = useSelector(initSelector)
+  const isAuth = useSelector(authSelector)
+
+  if (!isAuth) return <Login />
 
   if (!isInit)
     return (
@@ -21,7 +24,6 @@ const App: FC = () => {
       </Box>
     )
 
-  return <Login />
   return (
     <>
       <MenuAppBar />

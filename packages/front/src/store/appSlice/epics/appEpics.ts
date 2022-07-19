@@ -1,20 +1,20 @@
 import { catchError, EMPTY, filter, from, map, of } from 'rxjs'
 import { Epic } from 'redux-observable'
-import { MiddlewareDependencies, RootAction } from '../types'
-import { RootState } from '../reducers'
+import { MiddlewareDependencies, RootAction, RootState } from '../../root/types'
 import { isActionOf } from 'typesafe-actions'
 import * as actions from '../actions/appActions'
 import * as actionsWsHub from '../actions/wshub'
 import { switchMap } from 'rxjs/operators'
-import { getUnitsAction } from '../actions'
-import { changeLightUnitAction } from '../actions'
-import { notify } from '../actions'
-import { appErrorAction } from '../actions'
-import { UnitsEvent } from '../../api/socketConnector/schemas'
-import { LoadingStateEnum } from '../../enums'
+import { getUnitsAction, loginAction, setAuth } from '../../root/actions'
+import { changeLightUnitAction } from '../../root/actions'
+import { notify } from '../../root/actions'
+import { appErrorAction } from '../../root/actions'
+import { UnitsEvent } from '../../../api/socketConnector/schemas'
+import { RequestStateEnum } from '../../../enums'
 import { Entries, Units } from '../types/appState'
-import { loginAction } from '../actions'
-import { UsersService } from '../../api/services'
+import { UsersService } from '../../../api/services'
+import { createAuthHeader } from '../../../api/utils'
+import { Constants } from '../../../constants'
 
 export const onAppErrorEpic: Epic<RootAction, RootAction, RootState, MiddlewareDependencies> = (action$) =>
   action$.pipe(
@@ -33,8 +33,32 @@ export const initEpic: Epic<RootAction, RootAction, RootState, MiddlewareDepende
   action$.pipe(
     filter(isActionOf(actions.init.request)),
     switchMap(() => {
-      if (!process.env['NX_WS_HUB_URL']) return of(actions.init.failure())
-      connector.connect(process.env['NX_WS_HUB_URL'])
+      const { wsHubConnected } = state$.value.appState
+
+      return from(UsersService.checkToken({ options: { headers: createAuthHeader() } })).pipe(
+        map(({ status }) => {
+          !wsHubConnected && connector.connect(Constants.wsUrl)
+          return setAuth(status)
+        }),
+        catchError((error) => {
+          wsHubConnected && connector.disconnect()
+          localStorage.removeItem('accessToken')
+          return of(setAuth(false))
+        }),
+      )
+    }),
+  )
+
+export const onLoginSuccessEpic: Epic<RootAction, RootAction, RootState, MiddlewareDependencies> = (
+  action$,
+  state$,
+  { connector },
+) =>
+  action$.pipe(
+    filter(isActionOf(loginAction.success)),
+    switchMap(() => {
+      const { wsHubConnected } = state$.value.appState
+      !wsHubConnected && connector.connect(Constants.wsUrl)
       return EMPTY
     }),
   )
@@ -67,7 +91,7 @@ export const onGetUnitsActionEpic: Epic<RootAction, RootAction, RootState, Middl
             (Object.entries(units) as Entries<UnitsEvent['units']>).reduce(
               (acc, [key, value]) => ({
                 ...acc,
-                acc: (acc[key] = value.map((unit) => ({ ...unit, loadingState: LoadingStateEnum.SUCCESS }))),
+                acc: (acc[key] = value.map((unit) => ({ ...unit, requestState: RequestStateEnum.SUCCESS }))),
               }),
               units,
             ) as Units,
@@ -99,18 +123,6 @@ export const changeLightUnitEpic: Epic<RootAction, RootAction, RootState, Middle
   )
 }
 
-export const onLoginEpic: Epic<RootAction, RootAction, RootState, MiddlewareDependencies> = (action$) => {
-  return action$.pipe(
-    filter(isActionOf([loginAction.request])),
-    switchMap(({ payload }) => {
-      return from(UsersService.login({ data: { ...payload } })).pipe(
-        map((payload) => loginAction.success(payload)), // TODO make types for payload
-        catchError((error) => of(loginAction.failure(error))),
-      )
-    }),
-  )
-}
-
 export default [
   initEpic,
   initSuccessEpic,
@@ -118,5 +130,5 @@ export default [
   changeLightUnitEpic,
   onGetUnitsActionEpic,
   onAppErrorEpic,
-  onLoginEpic,
+  onLoginSuccessEpic,
 ]

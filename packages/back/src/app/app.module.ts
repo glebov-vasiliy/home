@@ -8,6 +8,7 @@ import { UsersModule } from '../users/users.module'
 import { User } from '../users/users.entity'
 import { Unit } from '../units/units.entity'
 import { AuthModule } from '../autch/auth.module'
+import { Constants } from '../constants'
 
 @Module({
   imports: [
@@ -17,11 +18,11 @@ import { AuthModule } from '../autch/auth.module'
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.NX_MYSQL_HOST,
-      port: Number(process.env.NX_MYSQL_PORT),
-      username: process.env.NX_MYSQL_USER,
-      password: process.env.NX_MYSQL_PASSWORD,
-      database: process.env.NX_MYSQL_BASE,
+      host: Constants.dbHost,
+      port: Constants.dbPort,
+      username: Constants.dbUser,
+      password: Constants.dbPassword,
+      database: Constants.dbBaseName,
       entities: [User, Unit],
       synchronize: true,
     }),

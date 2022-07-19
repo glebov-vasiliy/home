@@ -4,7 +4,7 @@ export enum unitStateEnum {
   inProgress = 'inProgress',
 }
 
-export enum LoadingStateEnum {
+export enum RequestStateEnum {
   IDLE = 'IDLE',
   ERROR = 'ERROR',
   LOADING = 'LOADING',

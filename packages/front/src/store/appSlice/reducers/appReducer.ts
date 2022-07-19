@@ -1,11 +1,12 @@
-import { AppState } from '../types/appState'
-import * as Actions from '../actions'
+import * as Actions from '../../root/actions'
 import { createReducer } from 'typesafe-actions'
-import { RootAction } from '../types'
-import { LoadingStateEnum } from '../../enums'
+import { RootAction } from '../../root/types'
+import { RequestStateEnum } from '../../../enums'
+import { AppState } from '../types/appState'
 
 export const initialState: AppState = {
   init: false,
+  wsHubConnected: false,
   lightUnits: [],
   driverUnits: [],
 }
@@ -24,7 +25,7 @@ export const appReducer = createReducer<AppState, RootAction>(initialState)
     ...state,
     lightUnits: [...state.lightUnits].map((unit) => ({
       ...unit,
-      loadingState: unit.id === id ? LoadingStateEnum.LOADING : unit.loadingState,
+      requestState: unit.id === id ? RequestStateEnum.LOADING : unit.requestState,
     })),
   }))
   .handleAction(Actions.changeLightUnitAction.success, (state, { payload: { id, isEnabled } }) => ({
@@ -32,13 +33,25 @@ export const appReducer = createReducer<AppState, RootAction>(initialState)
     lightUnits: [...state.lightUnits].map((unit) => ({
       ...unit,
       isEnabled: unit.id === id ? isEnabled : unit.isEnabled,
-      loadingState: unit.id === id ? LoadingStateEnum.SUCCESS : unit.loadingState,
+      requestState: unit.id === id ? RequestStateEnum.SUCCESS : unit.requestState,
     })),
   }))
   .handleAction(Actions.changeLightUnitAction.failure, (state, { payload: { id } }) => ({
     ...state,
     lightUnits: [...state.lightUnits].map((unit) => ({
       ...unit,
-      loadingState: unit.id === id ? LoadingStateEnum.ERROR : unit.loadingState,
+      requestState: unit.id === id ? RequestStateEnum.ERROR : unit.requestState,
     })),
+  }))
+  .handleAction(Actions.loginAction.request, (state) => ({
+    ...state,
+    requestState: RequestStateEnum.LOADING,
+  }))
+  .handleAction(Actions.wsHubConnected, (state) => ({
+    ...state,
+    wsHubConnected: true,
+  }))
+  .handleAction(Actions.wsHubDisconnected, (state) => ({
+    ...state,
+    wsHubConnected: false,
   }))

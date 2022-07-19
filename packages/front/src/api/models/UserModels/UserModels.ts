@@ -10,3 +10,8 @@ export const signup = createRequestModel({
   method: RequestMethodEnum.POST,
   path: '/api/users/signup',
 })
+
+export const checkToken = createRequestModel({
+  method: RequestMethodEnum.GET,
+  path: '/api/auth/check-token',
+})

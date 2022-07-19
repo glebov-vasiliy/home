@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios'
+import { Constants } from '../../constants'
 
 const options: AxiosRequestConfig = {
   withCredentials: true,
-  baseURL: process.env['NX_BACKEND_URL'],
+  baseURL: Constants.backendUrl,
   responseType: 'json',
 }
 

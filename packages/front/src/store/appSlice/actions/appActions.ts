@@ -1,5 +1,5 @@
 import { createAction, createAsyncAction, createCustomAction } from 'typesafe-actions'
-import { ExceptionEvent } from '../../api/socketConnector/schemas'
+import { ExceptionEvent } from '../../../api/socketConnector/schemas'
 import { ChangeLightUnit, Units } from '../types/appState'
 import { toast, ToastOptions } from 'react-toastify'
 
@@ -29,9 +29,3 @@ export const getUnitsAction = createAsyncAction(
   '@@app/getUnitsActionSuccess',
   '@@app/getUnitsActionFailure',
 )<undefined, Units, ExceptionEvent>()
-
-export const loginAction = createAsyncAction(
-  '@@app/loginActionRequest',
-  '@@app/loginActionSuccess',
-  '@@app/loginActionFailure',
-)<{ username: string; password: string }, unknown, ExceptionEvent>()

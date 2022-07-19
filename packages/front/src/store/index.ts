@@ -1,9 +1,9 @@
 import { createStore, compose, applyMiddleware } from 'redux'
 import { createEpicMiddleware } from 'redux-observable'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { rootReducer, RootState } from './reducers'
-import { RootAction } from './types'
-import { rootEpics } from './epics'
+import { rootReducer } from './root/reducers'
+import { RootAction, RootState } from './root/types'
+import { rootEpics } from './root/epics'
 import { BackendConnector } from '../api/socketConnector'
 const connector = BackendConnector.Instance
 

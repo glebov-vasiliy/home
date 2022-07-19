@@ -1,8 +1,9 @@
-import { LoadingStateEnum } from '../../enums'
-import { UnitEvent } from '../../api/socketConnector/schemas'
+import { RequestStateEnum } from '../../../enums'
+import { UnitEvent } from '../../../api/socketConnector/schemas'
 
 export type AppState = {
   init: boolean
+  wsHubConnected: boolean
 } & Units
 
 export type Units = {
@@ -10,9 +11,9 @@ export type Units = {
   driverUnits: Unit[]
 }
 
-export type Unit = UnitEvent & {
-  loadingState: LoadingStateEnum
-}
+export type Unit = UnitEvent & requestState
+
+export type requestState = { requestState: RequestStateEnum }
 
 export type ChangeLightUnit = Pick<Unit, 'id' | 'isEnabled'>
 

@@ -10,7 +10,7 @@ export class AuthService {
 
   async login({ username, id }: Omit<User, 'password'>) {
     return {
-      access_token: this.jwtService.sign({ username, id }),
+      accessToken: this.jwtService.sign({ username, id }),
     }
   }
 }

@@ -11,13 +11,13 @@ import { AppModule } from './app/app.module'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: 'http://localhost:4200', // TODO change  from env
+      origin: process.env['NX_ORIGIN'],
       credentials: true,
     },
   })
   const globalPrefix = 'api'
   app.setGlobalPrefix(globalPrefix)
-  const port = process.env.PORT || 3333
+  const port = process.env['BACKEND_PORT'] || 3333
   await app.listen(port)
   Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`)
 }
