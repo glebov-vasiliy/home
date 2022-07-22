@@ -3,8 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev:front": "nx serve front",
-    "dev:back": "nx serve back",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d 'packages/back/data-source.ts'",
     "migration:create": "npm run migration:create",
     "migration:generate": "npm run typeorm migration:generate -n -d 'packages/back/migrations/migration'",
