@@ -1,14 +1,13 @@
 import { DataSource } from 'typeorm'
 import * as dotenv from 'dotenv'
-import { Constants } from './src/constants'
 dotenv.config()
 const AppDataSource = new DataSource({
   type: 'mysql',
-  host: Constants.dbHost,
-  port: Constants.dbPort,
-  username: Constants.dbUser,
-  password: Constants.dbPassword,
-  database: Constants.dbBaseName,
+  host: process.env['NX_MYSQL_HOST'],
+  port: Number(process.env['NX_MYSQL_PORT']),
+  username: process.env['NX_MYSQL_USER'],
+  password: process.env['NX_MYSQL_PASSWORD'],
+  database: process.env['NX_MYSQL_BASE'],
   synchronize: true,
   dropSchema: false,
   logging: true,
@@ -16,5 +15,4 @@ const AppDataSource = new DataSource({
   migrations: [__dirname + '/migrations/*migration.ts'],
   // subscribers: ['subscriber/**/*.ts', 'dist/subscriber/**/.js'], // TODO check
 })
-
 export default AppDataSource

@@ -26,7 +26,7 @@ export class UsersService {
 
   async createUser({ name = '', username = '', password = '' }): Promise<string> {
     if (!name || !/^[A-Za-z]+$/g.test(name)) return 'wrongName'
-    if (!username || !/^[A-Za-z\d]+$/g.test(username)) return 'wrongLogin'
+    if (!username || !/^[A-Za-z\d]+$/g.test(username)) return 'wrongUsername'
     if (!password) return 'wrongPassword' // TODO mb create password rules
     if (await this.count(username)) return 'userExisting'
     await this.usersRepository.insert({
