@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from './users.entity'
 import * as bcrypt from 'bcrypt'
+import { UserJWTPayload } from '../autch/types'
 
 @Injectable()
 export class UsersService {
@@ -24,10 +25,20 @@ export class UsersService {
     })
   }
 
+  validateName(name: string): boolean {
+    return name && /^[A-Za-z]+$/g.test(name)
+  }
+  validateUsername(username: string): boolean {
+    return username && /^[A-Za-z\d]+$/g.test(username)
+  }
+  validatePassword(password: string): boolean {
+    return !!password // TODO mb create password rules
+  }
+
   async createUser({ name = '', username = '', password = '' }): Promise<string> {
-    if (!name || !/^[A-Za-z]+$/g.test(name)) return 'wrongName'
-    if (!username || !/^[A-Za-z\d]+$/g.test(username)) return 'wrongUsername'
-    if (!password) return 'wrongPassword' // TODO mb create password rules
+    if (!this.validateName(name)) return 'wrongName'
+    if (!this.validateUsername(username)) return 'wrongUsername'
+    if (!this.validatePassword(password)) return 'wrongPassword'
     if (await this.count(username)) return 'userExisting'
     await this.usersRepository.insert({
       name,
@@ -38,7 +49,9 @@ export class UsersService {
     return 'userAdded'
   }
 
-  // async remove(id: string): Promise<void> {
-  //   await this.usersRepository.delete(id)
-  // }
+  async updateName(user: UserJWTPayload, { name = '' }): Promise<string> {
+    if (!this.validateName(name)) return 'wrongName'
+    await this.usersRepository.update({ id: Number(user.userId) }, { name })
+    return 'userUpdate'
+  }
 }
