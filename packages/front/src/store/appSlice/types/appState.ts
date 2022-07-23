@@ -1,8 +1,9 @@
-import { RequestStateEnum } from '../../../enums'
+import { Pages, RequestStateEnum } from '../../../enums'
 import { UnitEvent } from '../../../api/socketConnector/schemas'
 
 export type AppState = {
   init: boolean
+  page: Pages
   wsHubConnected: boolean
 } & Units
 

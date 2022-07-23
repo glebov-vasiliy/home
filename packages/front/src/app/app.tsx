@@ -1,28 +1,30 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, lazy, Suspense } from 'react'
 import { MenuAppBar } from './components/MenuAppBar'
 import { TabPanel } from './components/TabPanel'
 import { CircularIndeterminate } from './components/CircularIndeterminate'
-import { authSelector, initSelector } from '../store/root/selectors'
+import { authSelector, initSelector, pageSelector } from '../store/root/selectors'
 import { useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Box } from '@mui/material'
 import { Login } from './components/Login'
+const Profile = lazy(() => import('./components/Profile'))
 
 const App: FC = () => {
   const isInit = useSelector(initSelector)
   const isAuth = useSelector(authSelector)
+  const page = useSelector(pageSelector)
 
-  if (!isAuth) return <Login />
+  if (!isAuth && isInit) return <Login />
 
-  if (!isInit)
+  if (!isInit) return <CircularIndeterminate />
+
+  if (page === 'profile') {
     return (
-      <Box
-        sx={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}
-      >
-        <CircularIndeterminate />
-      </Box>
+      <Suspense fallback={<CircularIndeterminate />}>
+        <Profile />
+      </Suspense>
     )
+  }
 
   return (
     <>

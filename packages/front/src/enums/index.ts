@@ -10,3 +10,8 @@ export enum RequestStateEnum {
   LOADING = 'LOADING',
   SUCCESS = 'SUCCESS',
 }
+
+export enum Pages {
+  main = 'main',
+  profile = 'profile',
+}

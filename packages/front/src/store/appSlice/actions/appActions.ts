@@ -2,6 +2,7 @@ import { createAction, createAsyncAction, createCustomAction } from 'typesafe-ac
 import { ExceptionEvent } from '../../../api/socketConnector/schemas'
 import { ChangeLightUnit, Units } from '../types/appState'
 import { toast, ToastOptions } from 'react-toastify'
+import { Pages } from '../../../enums'
 
 export const appErrorAction = createAction('@@app/error')<ExceptionEvent>()
 
@@ -18,6 +19,9 @@ export const init = createAsyncAction('@@app/initRequest', '@@app/initSuccess', 
   undefined,
   undefined
 >()
+
+export const setPage = createAction('@@app/setPage')<Pages>()
+
 export const changeLightUnitAction = createAsyncAction(
   '@@app/changeLightUnitRequest',
   '@@app/changeLightUnitSuccess',

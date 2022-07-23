@@ -28,3 +28,7 @@ export const userReducer = createReducer<UserState, RootAction>(initialState)
     ...state,
     auth: payload,
   }))
+  .handleAction(Actions.logout, (state) => ({
+    ...state,
+    auth: false,
+  }))

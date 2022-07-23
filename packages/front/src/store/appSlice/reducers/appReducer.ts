@@ -1,11 +1,12 @@
 import * as Actions from '../../root/actions'
 import { createReducer } from 'typesafe-actions'
 import { RootAction } from '../../root/types'
-import { RequestStateEnum } from '../../../enums'
+import { Pages, RequestStateEnum } from '../../../enums'
 import { AppState } from '../types/appState'
 
 export const initialState: AppState = {
   init: false,
+  page: Pages.main,
   wsHubConnected: false,
   lightUnits: [],
   driverUnits: [],
@@ -15,6 +16,10 @@ export const appReducer = createReducer<AppState, RootAction>(initialState)
   .handleAction(Actions.init.success, (state) => ({
     ...state,
     init: true,
+  }))
+  .handleAction(Actions.setPage, (state, { payload }) => ({
+    ...state,
+    page: payload,
   }))
   .handleAction(Actions.getUnitsAction.success, (state, { payload }) => ({
     ...state,

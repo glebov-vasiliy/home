@@ -8,3 +8,4 @@ export const loginAction = createAsyncAction(
 )<{ username: string; password: string }, undefined, ExceptionEvent>()
 
 export const setAuth = createAction('@@user/setAuth')<boolean>()
+export const logout = createAction('@@user/logout')()
